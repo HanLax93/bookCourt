@@ -122,7 +122,7 @@ def get_key(d, value):
     return k
 
 
-def Countdown(flag, m, s, mtoken):
+def Countdown(flag, m, s, d, mtoken):
     while flag:
         time.sleep(1)
         if (dt.datetime.now().second >= (s - 1)) & (dt.datetime.now().minute == m):
@@ -131,7 +131,7 @@ def Countdown(flag, m, s, mtoken):
                 if dt.datetime.now().second >= s:
                     while flag:
                         time.sleep(0.01)
-                        if (math.fabs(dt.datetime.now().microsecond - 450000)) <= 20000:
+                        if (math.fabs(dt.datetime.now().microsecond - d*1000)) <= 20000:
                             info = bookBadminton(host, mtoken)
                             print(info)
                             # print("now: ", dt.datetime.now())
@@ -141,11 +141,12 @@ def Countdown(flag, m, s, mtoken):
 if __name__ == '__main__':
     minute = 35
     second = 59
+    delay = 450
     host = "https://tyb.qingyou.ren"
     token_han = "a80340b7-355f-4dd5-b396-75e30045ed67"
     token_lzw = "9b32a80f-6c0f-451c-80d4-7cbaeb48862d"
     notTwelve = True
     getPriLogs(host, token_lzw)
-    Countdown(notTwelve, minute, second, token_lzw)
+    Countdown(notTwelve, minute, second, delay, token_lzw)
     time.sleep(5)
     getPriLogs(host, token_lzw)
