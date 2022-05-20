@@ -21,7 +21,7 @@
       
   - 启用 *$custom* 并将 *Localhost* 设为 Direct
     
-2. 设置 [`Burp Suite`]([https://www.proxifier.com/](https://portswigger.net/burp))
+2. 设置 [`Burp Suite`]([https://www.proxifier.com/](https://portswigger.net/burp)
   
   - Proxy - Options -Proxy Listenners:
     
