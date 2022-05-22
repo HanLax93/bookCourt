@@ -65,9 +65,9 @@ def countDown(rt, de, tms, mhost, mtoken, params):
                 # time.sleep(0.003)
                 # print(getLocalInterval(rt, de))
                 if getLocalInterval(rt, de) <= tms:
-                    # info = bookBadminton(mhost, mtoken, params)
+                    info = bookBadminton(mhost, mtoken, params)
                     print("数据返回时间：", dt.datetime.now())
-                    # print(info)
+                    print(info)
                     flag = False
 
 
