@@ -40,6 +40,6 @@ basicHeaders = {
 
 bookInfo = [periodIdList["Badminton 16to17"], stadiumIdList["Badminton court4"]]
 host = "https://tyb.qingyou.ren"
-token_han = "22eb9855-c13b-4ff5-a772-b037b782fdc3"  # 22-05-23 11:15 needs to be updated every day.
+token_han = "65bf8159-4232-44ec-9d39-8af04c4ba0d4"  # 22-05-24 11:30 needs to be updated every day.
 token_lzw = "13673187-6798-435e-8e32-06fb6cac3a50"  # aborted
 token_mys = ""
