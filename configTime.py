@@ -47,8 +47,9 @@ def getTimeVerify():
 
 def setTime(th, tm, ts):
     today = "{:%Y-%m-%d}".format(dt.datetime.now())
-    ret0 = today + ' ' + str(th) + ':' + str(tm) + ':'
-    ret = ret0 + '0' + str(ts) if ts <= 9 else ret0 + str(ts)
+    ret0 = today + ' ' + str(th) + ':'
+    ret1 = ret0 + ':' + '0' + str(ts) + ' ' if ts <= 9 else ret0 + str(tm)
+    ret = ret1 + '0' + str(ts) if ts <= 9 else ret0 + str(ts)
     ret = time.strptime(ret, '%Y-%m-%d %H:%M:%S')
     ret = time.mktime(ret)
     return ret
