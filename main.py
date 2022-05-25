@@ -14,7 +14,7 @@ from processData import get_key
 def getParser():
     myParser = argparse.ArgumentParser(description='timeSetting')
     myParser.add_argument('--hour', type=int, default=12, help='setup hour part')
-    myParser.add_argument('--min', type=int, default=1, help='setup minute part')
+    myParser.add_argument('--min', type=int, default=0, help='setup minute part')
     myParser.add_argument('--sec', type=int, default=0, help='setup second part')
     myParser.add_argument('--tms', type=int, default=300, help='setup microsecond part')
     a = myParser.parse_args()
