@@ -13,16 +13,16 @@ from processData import get_key
 
 def getParser():
     myParser = argparse.ArgumentParser(description='timeSetting')
-    myParser.add_argument('--hour', type=int, default=12, help='setup hour part')
-    myParser.add_argument('--min', type=int, default=0, help='setup minute part')
-    myParser.add_argument('--sec', type=int, default=0, help='setup second part')
-    myParser.add_argument('--tms', type=int, default=300, help='setup microsecond part')
+    myParser.add_argument('-h', '--hour', type=int, default=12, help='setup hour part')
+    myParser.add_argument('-m', '--min', type=int, default=0, help='setup minute part')
+    myParser.add_argument('-s', '--sec', type=int, default=0, help='setup second part')
+    myParser.add_argument('-d', '--delay', type=int, default=300, help='setup microsecond part')
     a = myParser.parse_args()
     t_h = a.hour
     t_m = a.min
     t_s = a.sec
-    t_mm = a.tms
-    return t_h, t_m, t_s, t_mm
+    t_d = a.tms
+    return t_h, t_m, t_s, t_d
 
 
 def bookBadminton(mhost, mtoken, p):
@@ -72,12 +72,12 @@ def countDown(rt, de, tms, mhost, mtoken, params):
 
 
 if __name__ == '__main__':
-    t_hour, t_min, t_sec, t_ms = getParser()
+    t_hour, t_min, t_sec, t_delay = getParser()
 
     ringTime = setTime(t_hour, t_min, t_sec)
     delay = countTo2(ringTime)
 
     getPriLogs(host, token_han)
-    countDown(ringTime, delay, 1-t_ms/1000, host, token_han, bookInfo)
+    countDown(ringTime, delay, 1-t_delay/1000, host, token_han, bookInfo)
     time.sleep(5)
     getPriLogs(host, token_han)
