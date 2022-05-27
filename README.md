@@ -29,7 +29,7 @@
     - Bind to adderss: *Loopback only*
       
 3. Open mini program
-4. Burp Suite - Proxy - Intercept - Intercept is on: 开始抓包
+4. Burp Suite - Proxy - Intercept - Intercept is on
 
 ## How to use:
 1.Fill your own token in *basicConfig.py*:
