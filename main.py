@@ -20,6 +20,6 @@ def getParser():  # provide a entrance for custom timing time test
 
 
 if __name__ == '__main__':
-    f = func(token_han)
+    f = func(token_han)  # put your token here
     f.getPriLogs()
-    f.bookCourt(bookInfo)
+    f.bookCourt(bookInfo)  # put your book info here
