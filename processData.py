@@ -9,16 +9,6 @@ def get_key(d, value):
     return k
 
 
-def pkcs7_padding(data):
-    if not isinstance(data, bytes):
-        data = data.encode()
-
-    padder = padding.PKCS7(algorithms.AES.block_size).padder()
-    padded_data = padder.update(data) + padder.finalize()
-
-    return padded_data
-
-
 class cryptCBCPkcs7(object):
 
     def __init__(self, key: str, iv: str):
@@ -31,7 +21,16 @@ class cryptCBCPkcs7(object):
         cryptor = AES.new(self.key, self.mode, self.iv)
 
         text = text.encode('utf-8')
-        text = pkcs7_padding(text)
+        text = self.pkcs7_padding(text)
         self.ciphertext = cryptor.encrypt(text)
 
         return base64.b64encode(self.ciphertext)
+
+    @staticmethod
+    def pkcs7_padding(data):
+        if not isinstance(data, bytes):
+            data = data.encode()
+        padder = padding.PKCS7(algorithms.AES.block_size).padder()
+        padded_data = padder.update(data) + padder.finalize()
+
+        return padded_data
