@@ -38,8 +38,10 @@ basicHeaders = {
     "Referer": "https://servicewechat.com/wxebade4c4672d5e61/13/page-frame.html"
 }
 
-bookInfo = [periodIdList["Badminton 16to17"], stadiumIdList["Badminton court4"]]
-host = "https://tyb.qingyou.ren"
+bookInfo = [periodIdList["Badminton 16to17"], stadiumIdList["Badminton court4"]]  # court and time you want to book
+host = "https://tyb.qingyou.ren"  # server
+
+# some token
 token_han = "18f72a85-df0c-4a52-99e7-5d030d0be230"  # 22-05-26 19:06 needs to be updated every day.
 token_lzw = "13673187-6798-435e-8e32-06fb6cac3a50"  # aborted
 token_mys = ""

@@ -1,11 +1,11 @@
 # Please adjust the delay according to the computer time this script running on referring to the website time.is
-# The post time should be about 11:59:59:500
+# The post time should be about 12:00:00:300
 
 import argparse
 from func import *
 
 
-def getParser():
+def getParser():  # provide a entrance for custom timing time test
     myParser = argparse.ArgumentParser(description='timeSetting')
     myParser.add_argument('-hr', '--hour', type=int, default=12, help='setup hour part')
     myParser.add_argument('-m', '--min', type=int, default=0, help='setup minute part')
@@ -20,6 +20,6 @@ def getParser():
 
 
 if __name__ == '__main__':
-    f = func(host, token_han)
+    f = func(token_han)
     f.getPriLogs()
     f.bookCourt(bookInfo)

@@ -4,12 +4,12 @@ from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import algorithms
 
 
-def get_key(d, value):
+def get_key(d, value):  # query the serial number of court with its stadium id
     k = [k for k, v in d.items() if v == value]
     return k
 
 
-class cryptCBCPkcs7(object):
+class cryptCBCPkcs7(object):  # signature the timestamp
 
     def __init__(self, key: str, iv: str):
         self.ciphertext = " "
@@ -27,7 +27,7 @@ class cryptCBCPkcs7(object):
         return base64.b64encode(self.ciphertext)
 
     @staticmethod
-    def pkcs7_padding(data):
+    def pkcs7_padding(data):  # padding the data to encrypt
         if not isinstance(data, bytes):
             data = data.encode()
         padder = padding.PKCS7(algorithms.AES.block_size).padder()
