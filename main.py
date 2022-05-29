@@ -1,25 +1,65 @@
-# Please adjust the delay according to the computer time this script running on referring to the website time.is
-# The post time should be about 12:00:00:300
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from ui.mainui import Ui_MainWindow
+from ui.popui import Ui_PopWindow
+import time
 
-import argparse
-from func import *
-
-
-def getParser():  # provide a entrance for custom timing time test
-    myParser = argparse.ArgumentParser(description='timeSetting')
-    myParser.add_argument('-hr', '--hour', type=int, default=12, help='setup hour part')
-    myParser.add_argument('-m', '--min', type=int, default=0, help='setup minute part')
-    myParser.add_argument('-s', '--sec', type=int, default=0, help='setup second part')
-    myParser.add_argument('-d', '--delay', type=int, default=300, help='setup microsecond part')
-    a = myParser.parse_args()
-    t_h = a.hour
-    t_m = a.min
-    t_s = a.sec
-    t_d = 1 - a.delay/1000
-    return t_h, t_m, t_s, t_d
+from application.app import getConfig, app
+from application.progress import long_operation
 
 
-if __name__ == '__main__':
-    f = func(token_han)  # put your token here
-    f.getPriLogs()
-    f.bookCourt(bookInfo)  # put your book info here
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super(MainWindow, self).__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+        self.popWin = PopWindow()
+        self.ui.btn.clicked.connect(self.whatBtnDo)
+
+        self.config = getConfig()
+        option1 = list(self.config['stadiumIdList'].keys())
+        option2 = list(self.config['periodIdList'].keys())
+        # 下拉框
+        # 添加options
+        # 两个下拉框分别是option1, option2
+        for i in option1:
+            self.ui.option1.addItem(i)
+        for i in option2:
+            self.ui.option2.addItem(i)
+
+    # 点击按钮触发的函数
+    def whatBtnDo(self):
+        # TODO: write code here
+        delayms = self.ui.input2.text()
+        token = self.ui.input.text()
+        court = self.ui.option1.currentText()
+        courtTime = self.ui.option2.currentText()
+        self.config.update({'topToken': token, 'topCourt': court, 'topCourtTime': courtTime, 'delayms': delayms})
+        t1, t2 = self.operation()
+        # 弹出第二个窗口
+        self.popWin.show()
+
+        self.popWin.ui.text1.setText(t1)
+        self.popWin.ui.text2.setText(t2)
+
+    @long_operation("Counting down")
+    def operation(self):
+        a = app(self.config)
+        return a.main()
+
+
+class PopWindow(QMainWindow):
+    def __init__(self):
+        super(PopWindow, self).__init__()
+        self.ui = Ui_PopWindow()
+        self.ui.setupUi(self)
+
+
+if __name__ == "__main__":
+    gapp = QApplication(sys.argv)
+
+    window = MainWindow()
+    window.show()
+
+    sys.exit(gapp.exec())
