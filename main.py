@@ -2,7 +2,6 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from ui.mainui import Ui_MainWindow
 from ui.popui import Ui_PopWindow
-import time
 
 from application.app import getConfig, app
 from application.progress import long_operation
