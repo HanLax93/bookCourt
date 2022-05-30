@@ -42,7 +42,8 @@ class app:
         bookInfo = [courtTime, court]
 
         f = modules.Features(token, self.config)  # put your token here
-        # _, info = f.getPriLogs()
+        _, ver = f.getPriLogs()
+        print(ver)
         info, info2 = f.bookCourt(bookInfo)  # put your book info here
 
         return info, info2
