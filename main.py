@@ -30,11 +30,15 @@ class MainWindow(QMainWindow):
     # 点击按钮触发的函数
     def whatBtnDo(self):
         # TODO: write code here
-        delayms = self.ui.input2.text()
+        t_hour = self.ui.input2.text()
+        t_min = self.ui.input3.text()
+        t_sec = self.ui.input4.text()
+        delayms = self.ui.input5.text()
+        timing = [t_hour, t_min, t_sec, delayms]
         token = self.ui.input.text()
         court = self.ui.option1.currentText()
         courtTime = self.ui.option2.currentText()
-        self.config.update({'topToken': token, 'topCourt': court, 'topCourtTime': courtTime, 'delayms': delayms})
+        self.config.update({'topToken': token, 'topCourt': court, 'topCourtTime': courtTime, 'timing': timing})
         t1, t2 = self.operation()
         # 弹出第二个窗口
         self.popWin.show()

@@ -33,8 +33,8 @@ class app:
         self.config = config
 
     def main(self):
-        delayms = int(self.config['delayms'])
-        t = [12, 0, 0, 1-delayms/1000]
+        timing = self.config['timing']
+        t = [int(timing[0]), int(timing[1]), int(timing[2]), 1-int(timing[3])/1000]
         self.config.update({'time': t})
 
         token = self.config['topToken']
