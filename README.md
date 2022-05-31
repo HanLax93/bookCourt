@@ -36,7 +36,7 @@
 ## How to use:
 - Choose the court and time drop-down list respectively
 - Fill your token captured in the above steps
-- Don't change the number 250 if not necessary
+- Don't change the numbers if not necessary
 - Click the button SURPRISE ME and wait for the result.
 
 ## Tips:
