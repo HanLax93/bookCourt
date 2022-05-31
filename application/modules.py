@@ -103,7 +103,7 @@ class Features:
         ntpTime, _ = ct.getNtpTime()
         relTime = ntpTime.tx_time + ntpTime.delay / 2 - (time.time()-postTime)
 
-        info = ct.styledTime(relTime) + '\n' + resolveInfo(info)
+        info = ct.styledTime(relTime, False) + '\n' + resolveInfo(info)
         _, info2 = self.getPriLogs()
         return info2, info
 
