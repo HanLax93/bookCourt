@@ -63,18 +63,19 @@ class Features:
 
         headers = self.headers
         # request headers
-        headers.update({"token": self.token, "Content-Length": "59", "Content-Type": "application/json"})
+        headers.update({"token": self.token, "Content-Type": "application/json"})
 
         s = requests.post(url, params, headers=headers).json()
+        # print(s)
 
         # resolve the serial number of the court from the response info
         court = get_key(self.stadiumIdList, str(s["data"][0]["stadiumId"]))[0]
         infoSum = "The latest:\n" + court + '\n' + s['data'][0]['period'] + '\n' + s['data'][0]['date']
-        # print(infoSum)
         return s, infoSum
 
     def bookCourt(self, params):  # countdown and then book
         info = ""
+        postTime = None
         _, _, _, t_delay = self.time  # get delay microseconds
         ct = ConfigureTime(self.time)
         ct.countTo2()  # countdown to last 2 min
@@ -85,11 +86,12 @@ class Features:
         while flag:
             time.sleep(0.989)
             # print(getLocalInterval(rt, de))
-            if ct.getLocalInterval() <= 2:
+            if ct.getLocalInterval() <= 3:
                 while flag:
                     # time.sleep(0.003)
                     # print(getLocalInterval(ringTime, de))
                     if ct.getLocalInterval() <= t_delay:
+                        postTime = time.time()
                         info = self.bookBadminton(params)
                         # print("数据返回时间：", dt.datetime.now())
                         # print(info)
@@ -97,7 +99,11 @@ class Features:
 
         # print the latest booked court after 5 sec
         time.sleep(5)
-        info = resolveInfo(info)
+
+        ntpTime, _ = ct.getNtpTime()
+        relTime = ntpTime.tx_time + ntpTime.delay / 2 - (time.time()-postTime)
+
+        info = ct.styledTime(relTime) + '\n' + resolveInfo(info)
         _, info2 = self.getPriLogs()
         return info2, info
 
@@ -142,6 +148,7 @@ class ConfigureTime:
             timeDelay += times.tx_time + times.delay / 2 - time.time()
 
         self.delay = timeDelay / 10
+        return self.delay
 
     def getInterval(self):  # get time interval between server time and timing time
         ntpClient = ntplib.NTPClient()
@@ -172,6 +179,16 @@ class ConfigureTime:
         ret = time.strptime(ret, '%Y-%m-%d %H:%M:%S')
         return time.mktime(ret)
 
+    def styledTime(self, t, local=True):
+        if local:
+            t = t + self.delay
+        tmp = time.localtime(t)
+        tmp = time.strftime('%Y-%m-%d %H:%M:%S', tmp)
+
+        st = tmp + ' ' + str(round(t % 1 * 1000))
+
+        return st
+
     @staticmethod
     def getTimeVerify():  # get signature value of timestamp when request sends
         key = "6f00cd9cade84e52"
@@ -185,8 +202,8 @@ class ConfigureTime:
     @staticmethod
     def getNtpTime():  # just get the server time
         ntpClient = ntplib.NTPClient()
-        times = ntpClient.request("edu.ntp.org.cn", version=2).tx_time
+        times = ntpClient.request("edu.ntp.org.cn", version=2)
 
-        localTime = time.localtime(ntpClient.request("edu.ntp.org.cn", version=2).tx_time)
+        localTime = time.localtime(times.tx_time)
         localTime = time.strftime("%Y-%m-%d %H:%M:%S", localTime)
-        return times, localTime + str(times % 1)
+        return times, localTime + str(times.tx_time % 1)
