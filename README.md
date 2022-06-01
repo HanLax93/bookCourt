@@ -53,4 +53,4 @@ C:\Users\$USERNAME\AppData\Roaming\Tencent\WeChat\XPlugin\Plugins\WMPFRuntime\$R
 - Note: find all WeChatAppEx.exe in every `$RANDOM_NUMBER` folder.
 
 token is here:
-![](./src/img.png)
+![img.png](config/img.png)
