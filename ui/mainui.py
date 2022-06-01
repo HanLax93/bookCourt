@@ -21,6 +21,9 @@ from PyQt5.QtWidgets import (QApplication, QComboBox, QLineEdit, QMainWindow,
 
 
 class Ui_MainWindow(object):
+    def __init__(self, memo):
+        self.memo = memo
+
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
@@ -77,11 +80,12 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.input.setText("05e22ccd-200c-4e24-b05d-be253c1825a5")
-        self.input2.setText("12")
-        self.input3.setText("0")
-        self.input4.setText("0")
-        self.input5.setText("200")
+        self.input.setText(self.memo['topToken'])
+        timing = self.memo['timing']
+        self.input2.setText(timing[0])
+        self.input3.setText(timing[1])
+        self.input4.setText(timing[2])
+        self.input5.setText(timing[3])
 
         self.btn.setText(QCoreApplication.translate("MainWindow", u"SURPRISE ME", None))
     # retranslateUi

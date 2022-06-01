@@ -1,4 +1,6 @@
 import sys
+
+import yaml
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from ui.mainui import Ui_MainWindow
 from ui.popui import Ui_PopWindow
@@ -8,9 +10,9 @@ from application.progress import long_operation
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, mem):
         super(MainWindow, self).__init__()
-        self.ui = Ui_MainWindow()
+        self.ui = Ui_MainWindow(mem)
         self.ui.setupUi(self)
 
         self.popWin = PopWindow()
@@ -27,6 +29,9 @@ class MainWindow(QMainWindow):
         for i in option2:
             self.ui.option2.addItem(i)
 
+        self.ui.option1.setCurrentText(mem['topCourt'])
+        self.ui.option2.setCurrentText(mem['topCourtTime'])
+
     # 点击按钮触发的函数
     def whatBtnDo(self):
         # TODO: write code here
@@ -41,6 +46,15 @@ class MainWindow(QMainWindow):
         self.config.update({'topToken': token, 'topCourt': court, 'topCourtTime': courtTime, 'timing': timing})
         t1, t2 = self.operation()
         # 弹出第二个窗口
+
+        fname = './config/memo.yaml'
+        mem = open(fname, 'r')
+        mem_data = yaml.load(mem, Loader=yaml.FullLoader)
+        mem_data.update({'topToken': token, 'topCourt': court, 'topCourtTime': courtTime, 'timing': timing})
+        with open(fname, 'w') as f:
+            f.write(yaml.dump(mem_data, default_flow_style=False))
+            f.close()
+
         self.popWin.show()
 
         self.popWin.ui.text1.setText(t1)
@@ -62,7 +76,11 @@ class PopWindow(QMainWindow):
 if __name__ == "__main__":
     gapp = QApplication(sys.argv)
 
-    window = MainWindow()
+    memo = open('./config/memo.yaml', 'r')
+    memo_data = yaml.load(memo, Loader=yaml.FullLoader)
+    memo.close()
+
+    window = MainWindow(memo_data)
     window.show()
 
     sys.exit(gapp.exec())
