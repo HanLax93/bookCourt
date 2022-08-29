@@ -1,8 +1,8 @@
 timing:
-- '10'
-- '18'
-- '0'
-- '200'
+- '21'
+- '41'
+- '00'
+- '20'
 topCourt: Badminton court4
-topCourtTime: Badminton 18to19
-topToken: 0dfb2495-104d-46e3-a8a4-521a1d3b012d
+topCourtTime: Badminton 17to18
+topToken: dac83898-05f0-4c6e-b459-b39d85fdad9d

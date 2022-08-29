@@ -1,5 +1,3 @@
-# Please adjust the delay according to the computer time this script running on referring to the website time.is
-# The post time should be about 12:00:00:300
 import argparse
 from application import modules
 import yaml
@@ -43,7 +41,9 @@ class app:
 
         f = modules.Features(token, self.config)  # put your token here
         _, ver = f.getPriLogs()
-        print(ver)
-        info, info2 = f.bookCourt(bookInfo)  # put your book info here
+        if ver is not None:
+            info, info2 = f.bookCourt(bookInfo)  # put your book info here
+        else:
+            info, info2 = "Invalid token.", "Invalid token."
 
         return info, info2

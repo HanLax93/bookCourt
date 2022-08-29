@@ -57,6 +57,7 @@ class Features:
 
     def getPriLogs(self):  # get the latest booking info
         # limit param means only return the latest booking info
+        infoSum = None
         params = {"containCanceled": "false", "desc": "true", "limit": "1", "offset": "0"}
         params = json.dumps(params)
         url = self.host + "/user/getPriLogs"  # url to which query request post
@@ -69,8 +70,13 @@ class Features:
         # print(s)
 
         # resolve the serial number of the court from the response info
-        court = get_key(self.stadiumIdList, str(s["data"][0]["stadiumId"]))[0]
-        infoSum = "The latest:\n" + court + '\n' + s['data'][0]['period'] + '\n' + s['data'][0]['date']
+        try:
+            myData = s['data']
+        except KeyError:
+            print("Invalid token.")
+        else:
+            court = get_key(self.stadiumIdList, str(myData[0]["stadiumId"]))[0]
+            infoSum = "The latest:\n" + court + '\n' + myData[0]['period'] + '\n' + myData[0]['date']
         return s, infoSum
 
     def bookCourt(self, params):  # countdown and then book
@@ -92,8 +98,9 @@ class Features:
                     # print(getLocalInterval(ringTime, de))
                     if ct.getLocalInterval() <= t_delay:
                         postTime = time.time()
+                        print("数据发送时间：", time.time()+ct.delay)
                         info = self.bookBadminton(params)
-                        # print("数据返回时间：", dt.datetime.now())
+                        print("数据返回时间：", time.time()+ct.delay)
                         # print(info)
                         flag = False
 
@@ -189,13 +196,15 @@ class ConfigureTime:
 
         return st
 
-    @staticmethod
-    def getTimeVerify():  # get signature value of timestamp when request sends
+    def getTimeVerify(self):  # get signature value of timestamp when request sends
+        _, _, _, t_ms = self.time
         key = "6f00cd9cade84e52"
         iv = "25d82196341548ef"
         cryptor = cryptCBCPkcs7(key, iv)
 
-        TS = str(round(time.time() * 1000))
+        TS_hms = str(round(self.timingTime - 1))
+        TS_ms = round(1000 - t_ms*1000)
+        TS = TS_hms + str(TS_ms) if TS_ms >= 100 else TS_hms + '0' + str(TS_ms)
         TSS = cryptor.encrypt(TS).decode()
         return TS, TSS
 
