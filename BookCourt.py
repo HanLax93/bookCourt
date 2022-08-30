@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
     def callbacklog(self, msg):
         if msg[1] == "False":
             self.ui.label1.setText(msg[0])
-        elif msg[0] is None:
+        elif not msg[1]:
             self.ui.label1.setText('Invalid token.')
         else:
             self.resize(540, 335)

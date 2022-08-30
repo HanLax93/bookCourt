@@ -106,16 +106,16 @@ class Features:
 
         # print the latest booked court after 5 sec
         time.sleep(5)
-        _, info2 = self.getPriLogs()
+        _, ret2 = self.getPriLogs()
 
         if not info['success']:
-            info = info['errMsg']
-            info2 = "False"
+            ret1 = info['errMsg']
+            ret2 = "False"
         else:
             ntpTime, _ = ct.getNtpTime()
             relTime = ntpTime.tx_time + ntpTime.delay / 2 - (time.time() - postTime)
-            info = "提交时间:\n" + ct.styledTime(relTime, False) + '\n' + resolveInfo(info)
-        return info, info2
+            ret1 = "提交时间:\n" + ct.styledTime(relTime, False) + '\n' + resolveInfo(info)
+        return ret1, ret2
 
     def getToken(self):
         params = {
