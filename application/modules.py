@@ -33,10 +33,10 @@ class Features:
 
         url = self.host + "/user/cancel"  # url to which cancel request post
         headers = self.headers
-        headers.update({"Token": self.token, "Content-Type": "application/x-www-form-urlencoded"})  # request headers
+        headers.update({"token": self.token, "Content-Type": "application/x-www-form-urlencoded"})  # request headers
 
         s = requests.post(url, params, headers=headers)  # response information
-        return s.json
+        return s
 
     def bookBadminton(self, p):  # try to book a Badminton court
         today = '{:%Y-%m-%d}'.format(dt.datetime.now())  # the date today
@@ -73,14 +73,14 @@ class Features:
         try:
             myData = s['data']
         except KeyError:
-            print("Invalid token.")
+            pass
         else:
             court = get_key(self.stadiumIdList, str(myData[0]["stadiumId"]))[0]
-            infoSum = "The latest:\n" + court + '\n' + myData[0]['period'] + '\n' + myData[0]['date']
+            infoSum = court + '\n' + myData[0]['period'] + '\n' + myData[0]['date']
         return s, infoSum
 
     def bookCourt(self, params):  # countdown and then book
-        info = ""
+        info = {}
         postTime = None
         _, _, _, t_delay = self.time  # get delay microseconds
         ct = ConfigureTime(self.time)
@@ -98,21 +98,24 @@ class Features:
                     # print(getLocalInterval(ringTime, de))
                     if ct.getLocalInterval() <= t_delay:
                         postTime = time.time()
-                        print("数据发送时间：", time.time()+ct.delay)
+                        # print("数据发送时间：", time.time()+ct.delay)
                         info = self.bookBadminton(params)
-                        print("数据返回时间：", time.time()+ct.delay)
+                        # print("数据返回时间：", time.time()+ct.delay)
                         # print(info)
                         flag = False
 
         # print the latest booked court after 5 sec
         time.sleep(5)
-
-        ntpTime, _ = ct.getNtpTime()
-        relTime = ntpTime.tx_time + ntpTime.delay / 2 - (time.time()-postTime)
-
-        info = ct.styledTime(relTime, False) + '\n' + resolveInfo(info)
         _, info2 = self.getPriLogs()
-        return info2, info
+
+        if not info['success']:
+            info = info['errMsg']
+            info2 = "False"
+        else:
+            ntpTime, _ = ct.getNtpTime()
+            relTime = ntpTime.tx_time + ntpTime.delay / 2 - (time.time() - postTime)
+            info = "提交时间:\n" + ct.styledTime(relTime, False) + '\n' + resolveInfo(info)
+        return info, info2
 
     def getToken(self):
         params = {
@@ -129,9 +132,9 @@ class Features:
 
 
 class ConfigureTime:
-    def __init__(self, myTime):  # init the delay with 0 and the timing time
+    def __init__(self, mytime):  # init the delay with 0 and the timing time
         self.delay = 0
-        self.time = myTime
+        self.time = mytime
         self.timingTime = self.setTime()
 
     def countTo2(self):  # countdown to last 2 min

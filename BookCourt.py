@@ -2,12 +2,10 @@ import sys
 
 import yaml
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtGui
 from ui.mainui import Ui_MainWindow
-from ui.popui import Ui_PopWindow
 
-from application.app import getConfig, app
-from application.progress import long_operation
+from application.app import getConfig, App
 
 
 class RunThread(QtCore.QThread):
@@ -18,7 +16,7 @@ class RunThread(QtCore.QThread):
         self.config = config
 
     def run(self):
-        a = app(self.config)
+        a = App(self.config)
         t1, t2 = a.main()
         ret = [t1, t2]
         self.signal.emit(ret)
@@ -27,10 +25,9 @@ class RunThread(QtCore.QThread):
 class MainWindow(QMainWindow):
     def __init__(self, mem):
         super(MainWindow, self).__init__()
+        self.thread = None
         self.ui = Ui_MainWindow(mem)
         self.ui.setupUi(self)
-
-        self.popWin = PopWindow()
         self.ui.btn.clicked.connect(self.whatBtnDo)
 
         self.config = getConfig()
@@ -60,7 +57,6 @@ class MainWindow(QMainWindow):
         courtTime = self.ui.option2.currentText()
         self.config.update({'topToken': token, 'topCourt': court, 'topCourtTime': courtTime, 'timing': timing})
         # t1, t2 = self.operation()
-        # 弹出第二个窗口
 
         fname = './config/memo.yaml'
         mem = open(fname, 'r')
@@ -70,28 +66,21 @@ class MainWindow(QMainWindow):
             f.write(yaml.dump(mem_data, default_flow_style=False))
             f.close()
 
+        self.resize(540, 240)
         self.ui.label1.setText("loading...")
 
         self.thread = RunThread(self.config)
         self.thread.signal.connect(self.callbacklog)
         self.thread.start()
-        # self.popWin.show()
-        # self.popWin.ui.text1.setText(t1)
-        # self.popWin.ui.text2.setText(t2)
 
     def callbacklog(self, msg):
-        self.ui.label1.setText(msg[1] + '\n' + msg[0])
-    # @long_operation("Counting down")
-    # def operation(self):
-    #     a = app(self.config)
-    #     return a.main()
-
-
-class PopWindow(QMainWindow):
-    def __init__(self):
-        super(PopWindow, self).__init__()
-        self.ui = Ui_PopWindow()
-        self.ui.setupUi(self)
+        if msg[1] == "False":
+            self.ui.label1.setText(msg[0])
+        elif msg[0] is None:
+            self.ui.label1.setText('Invalid token.')
+        else:
+            self.resize(540, 335)
+            self.ui.label1.setText(msg[0] + '\n' + msg[1])
 
 
 if __name__ == "__main__":
@@ -102,6 +91,8 @@ if __name__ == "__main__":
     memo.close()
 
     window = MainWindow(memo_data)
+    window.setWindowTitle("预约小工具")
+    window.setWindowIcon(QtGui.QIcon("src/icon.png"))
     window.show()
 
     sys.exit(gapp.exec())

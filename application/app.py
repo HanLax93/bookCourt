@@ -26,7 +26,7 @@ def getConfig():
     return data
 
 
-class app:
+class App:
     def __init__(self, config):
         self.config = config
 
@@ -39,11 +39,16 @@ class app:
         courtTime, court = self.config['topCourtTime'], self.config['topCourt']
         bookInfo = [courtTime, court]
 
-        f = modules.Features(token, self.config)  # put your token here
-        _, ver = f.getPriLogs()
-        if ver is not None:
-            info, info2 = f.bookCourt(bookInfo)  # put your book info here
+        testTime = modules.ConfigureTime(t)
+        testTime.getTimeDelay()
+        if testTime.getLocalInterval() < 0:
+            info = "时间设置错误。"
+            info2 = "False"
         else:
-            info, info2 = "Invalid token.", "Invalid token."
-
+            f = modules.Features(token, self.config)  # put your token here
+            _, ver = f.getPriLogs()
+            if ver is not None:
+                info, info2 = f.bookCourt(bookInfo)  # put your book info here
+            else:
+                info, info2 = "", ""
         return info, info2
