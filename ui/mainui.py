@@ -17,7 +17,7 @@ from PyQt5.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
                          QPalette, QPixmap, QRadialGradient, QTransform)
 from PyQt5.QtWidgets import (QApplication, QComboBox, QLineEdit, QMainWindow,
                              QMenuBar, QPushButton, QSizePolicy, QStatusBar,
-                             QWidget)
+                             QWidget, QTextBrowser)
 
 
 class Ui_MainWindow(object):
@@ -27,7 +27,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(600, 270)
+        MainWindow.resize(540, 420)
         font = QFont()
         font.setPointSize(14)
         MainWindow.setFont(font)
@@ -41,28 +41,33 @@ class Ui_MainWindow(object):
 
         self.input = QLineEdit(self.centralwidget)
         self.input.setObjectName(u"input")
-        self.input.setGeometry(QRect(60, 90, 480, 30))
+        self.input.setGeometry(QRect(30, 90, 480, 30))
         self.input2 = QLineEdit(self.centralwidget)
         self.input2.setObjectName(u"input2")
-        self.input2.setGeometry(QRect(60, 140, 60, 30))
+        self.input2.setGeometry(QRect(30, 140, 60, 30))
         self.input3 = QLineEdit(self.centralwidget)
         self.input3.setObjectName(u"input3")
-        self.input3.setGeometry(QRect(150, 140, 60, 30))
+        self.input3.setGeometry(QRect(120, 140, 60, 30))
         self.input4 = QLineEdit(self.centralwidget)
         self.input4.setObjectName(u"input4")
-        self.input4.setGeometry(QRect(240, 140, 60, 30))
+        self.input4.setGeometry(QRect(210, 140, 60, 30))
         self.input5 = QLineEdit(self.centralwidget)
         self.input5.setObjectName(u"input5")
-        self.input5.setGeometry(QRect(330, 140, 60, 30))
+        self.input5.setGeometry(QRect(300, 140, 60, 30))
         self.btn = QPushButton(self.centralwidget)
         self.btn.setObjectName(u"btn")
-        self.btn.setGeometry(QRect(349, 190, 191, 30))
+        self.btn.setGeometry(QRect(390, 140, 120, 30))
         self.option1 = QComboBox(self.centralwidget)
         self.option1.setObjectName(u"option1")
-        self.option1.setGeometry(QRect(60, 40, 200, 30))
+        self.option1.setGeometry(QRect(30, 40, 200, 30))
         self.option2 = QComboBox(self.centralwidget)
         self.option2.setObjectName(u"option2")
-        self.option2.setGeometry(QRect(340, 40, 200, 30))
+        self.option2.setGeometry(QRect(310, 40, 200, 30))
+
+        self.label1 = QTextBrowser(self.centralwidget)
+        self.label1.setObjectName(u"label1")
+        self.label1.setGeometry(QRect(30, 190, 480, 300))
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")

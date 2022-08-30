@@ -2,11 +2,26 @@ import sys
 
 import yaml
 from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5 import QtCore
 from ui.mainui import Ui_MainWindow
 from ui.popui import Ui_PopWindow
 
 from application.app import getConfig, app
 from application.progress import long_operation
+
+
+class RunThread(QtCore.QThread):
+    signal = QtCore.pyqtSignal(list)
+
+    def __init__(self, config):
+        super(RunThread, self).__init__()
+        self.config = config
+
+    def run(self):
+        a = app(self.config)
+        t1, t2 = a.main()
+        ret = [t1, t2]
+        self.signal.emit(ret)
 
 
 class MainWindow(QMainWindow):
@@ -44,7 +59,7 @@ class MainWindow(QMainWindow):
         court = self.ui.option1.currentText()
         courtTime = self.ui.option2.currentText()
         self.config.update({'topToken': token, 'topCourt': court, 'topCourtTime': courtTime, 'timing': timing})
-        t1, t2 = self.operation()
+        # t1, t2 = self.operation()
         # 弹出第二个窗口
 
         fname = './config/memo.yaml'
@@ -55,15 +70,21 @@ class MainWindow(QMainWindow):
             f.write(yaml.dump(mem_data, default_flow_style=False))
             f.close()
 
-        self.popWin.show()
+        self.ui.label1.setText("loading...")
 
-        self.popWin.ui.text1.setText(t1)
-        self.popWin.ui.text2.setText(t2)
+        self.thread = RunThread(self.config)
+        self.thread.signal.connect(self.callbacklog)
+        self.thread.start()
+        # self.popWin.show()
+        # self.popWin.ui.text1.setText(t1)
+        # self.popWin.ui.text2.setText(t2)
 
-    @long_operation("Counting down")
-    def operation(self):
-        a = app(self.config)
-        return a.main()
+    def callbacklog(self, msg):
+        self.ui.label1.setText(msg[1] + '\n' + msg[0])
+    # @long_operation("Counting down")
+    # def operation(self):
+    #     a = app(self.config)
+    #     return a.main()
 
 
 class PopWindow(QMainWindow):
