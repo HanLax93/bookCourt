@@ -1,8 +1,8 @@
 timing:
-- '21'
-- '54'
-- '00'
+- '16'
+- '16'
 - '20'
-topCourt: Tennis court1
-topCourtTime: Tennis 20to21
-topToken: 3d8dea8f-5f64-4555-96dc-8a723f20f0f3
+- '20'
+topCourt: Badminton court3
+topCourtTime: Badminton 18to19
+topToken: 30fdf632-8089-464f-ad87-91e71f63b702

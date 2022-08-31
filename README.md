@@ -1,4 +1,4 @@
-# bookCourt
+# BookCourt
 ## Wechat packet capture:
 
 1.Setup [`Proxifier`](https://www.proxifier.com/)

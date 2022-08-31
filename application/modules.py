@@ -5,7 +5,7 @@ import ntplib
 import requests
 import datetime as dt
 
-from application.utils import get_key, cryptCBCPkcs7
+from application.utils import get_key, cryptCBCPkcs7, log
 
 
 def resolveInfo(params):
@@ -26,7 +26,7 @@ class Features:
         self.time = config['time']
 
     def cancelCourt(self):  # you can try to cancel the booking with this function
-        data, _ = self.getPriLogs()
+        data, _, _ = self.getPriLogs()
         stadiumId = data['data'][0]['id']  # the id of the latest court booking
         params = {"logId": str(stadiumId)}  # request params
         params = json.dumps(params)
@@ -43,6 +43,9 @@ class Features:
         # request params including the id and the time you want to book
         params = {"periodId": p[0], "date": today, "stadiumId": p[1]}
         params = json.dumps(params)
+
+        log(params)
+
         url = self.host + "/user/book"  # url to which book request post
 
         # time and signature time when request sends
@@ -57,6 +60,7 @@ class Features:
 
     def getPriLogs(self):  # get the latest booking info
         # limit param means only return the latest booking info
+        nickname = "login"
         infoSum = None
         params = {"containCanceled": "false", "desc": "true", "limit": "1", "offset": "0"}
         params = json.dumps(params)
@@ -77,7 +81,8 @@ class Features:
         else:
             court = get_key(self.stadiumIdList, str(myData[0]["stadiumId"]))[0]
             infoSum = court + '\n' + myData[0]['period'] + '\n' + myData[0]['date']
-        return s, infoSum
+            nickname = myData[0]['nickName']
+        return s, infoSum, nickname
 
     def bookCourt(self, params):  # countdown and then book
         info = {}
@@ -106,7 +111,7 @@ class Features:
 
         # print the latest booked court after 5 sec
         time.sleep(5)
-        _, ret2 = self.getPriLogs()
+        _, ret2, _ = self.getPriLogs()
 
         if not info['success']:
             ret1 = info['errMsg']

@@ -6,13 +6,28 @@ from PyQt5 import QtCore, QtGui
 from ui.mainui import Ui_MainWindow
 
 from application.app import getConfig, App
+from application.modules import Features
 
 
-class RunThread(QtCore.QThread):
+class RunThread1(QtCore.QThread):
     signal = QtCore.pyqtSignal(list)
 
     def __init__(self, config):
-        super(RunThread, self).__init__()
+        super(RunThread1, self).__init__()
+        self.config = config
+
+    def run(self):
+        a = App(self.config)
+        t1, t2 = a.main()
+        ret = [t1, t2]
+        self.signal.emit(ret)
+
+
+class RunThread2(QtCore.QThread):
+    signal = QtCore.pyqtSignal(list)
+
+    def __init__(self, config):
+        super(RunThread2, self).__init__()
         self.config = config
 
     def run(self):
@@ -30,6 +45,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.ui.btn.clicked.connect(self.whatBtnDo)
 
+        self.nickname = "login"
         self.config = getConfig()
         option1 = list(self.config['stadiumIdList'].keys())
         option2 = list(self.config['periodIdList'].keys())
@@ -43,6 +59,7 @@ class MainWindow(QMainWindow):
 
         self.ui.option1.setCurrentText(mem['topCourt'])
         self.ui.option2.setCurrentText(mem['topCourtTime'])
+        self.ui.label2.setText(self.nickname)
 
     # 点击按钮触发的函数
     def whatBtnDo(self):
@@ -56,6 +73,9 @@ class MainWindow(QMainWindow):
         court = self.ui.option1.currentText()
         courtTime = self.ui.option2.currentText()
         self.config.update({'topToken': token, 'topCourt': court, 'topCourtTime': courtTime, 'timing': timing})
+        timing = self.config['timing']
+        t = [int(timing[0]), int(timing[1]), int(timing[2]), 1-int(timing[3])/1000]
+        self.config.update({'time': t})
         # t1, t2 = self.operation()
 
         fname = './config/memo.yaml'
@@ -66,10 +86,12 @@ class MainWindow(QMainWindow):
             f.write(yaml.dump(mem_data, default_flow_style=False))
             f.close()
 
+        _, _, self.nickname = Features(token, self.config).getPriLogs()
+        self.ui.label2.setText(self.nickname)
         self.resize(540, 240)
         self.ui.label1.setText("loading...")
 
-        self.thread = RunThread(self.config)
+        self.thread = RunThread1(self.config)
         self.thread.signal.connect(self.callbacklog)
         self.thread.start()
 

@@ -1,7 +1,16 @@
 import base64
+import datetime
+
 from Crypto.Cipher import AES
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import algorithms
+
+
+def log(logmsg: str):
+    with open('logs/log.txt', 'a') as f:
+        logtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S',)
+        f.write(logtime + ' ' + logmsg + '\n\n')
+        f.close()
 
 
 def get_key(d, value):  # query the serial number of court with its stadium id

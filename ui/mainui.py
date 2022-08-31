@@ -41,7 +41,7 @@ class Ui_MainWindow(object):
 
         self.input = QLineEdit(self.centralwidget)
         self.input.setObjectName(u"input")
-        self.input.setGeometry(QRect(30, 70, 480, 30))
+        self.input.setGeometry(QRect(30, 70, 375, 30))
         self.input2 = QLineEdit(self.centralwidget)
         self.input2.setObjectName(u"input2")
         self.input2.setGeometry(QRect(30, 120, 60, 30))
@@ -67,6 +67,11 @@ class Ui_MainWindow(object):
         self.label1 = QTextBrowser(self.centralwidget)
         self.label1.setObjectName(u"label1")
         self.label1.setGeometry(QRect(30, 170, 480, 180))
+
+        self.label2 = QTextBrowser(self.centralwidget)
+        self.label2.setObjectName(u'label2')
+        self.label2.setGeometry(QRect(435, 70, 75, 30))
+        self.label2.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)

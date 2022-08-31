@@ -1,5 +1,5 @@
 import argparse
-from application import modules
+from application import modules, utils
 import yaml
 
 
@@ -31,14 +31,12 @@ class App:
         self.config = config
 
     def main(self):
-        timing = self.config['timing']
-        t = [int(timing[0]), int(timing[1]), int(timing[2]), 1-int(timing[3])/1000]
-        self.config.update({'time': t})
 
         token = self.config['topToken']
         courtTime, court = self.config['topCourtTime'], self.config['topCourt']
         bookInfo = [courtTime, court]
 
+        t = self.config['time']
         testTime = modules.ConfigureTime(t)
         testTime.getTimeDelay()
         if testTime.getLocalInterval() < 0:
@@ -46,9 +44,10 @@ class App:
             info2 = "False"
         else:
             f = modules.Features(token, self.config)  # put your token here
-            _, ver = f.getPriLogs()
+            _, ver, _ = f.getPriLogs()
             if ver is not None:
                 info, info2 = f.bookCourt(bookInfo)  # put your book info here
             else:
-                info, info2 = "", ""
+                info, info2 = "Invalid token.", ""
+        utils.log(info + '\n' + info2)
         return info, info2
